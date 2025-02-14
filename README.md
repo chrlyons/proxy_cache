@@ -8,7 +8,7 @@ This project demonstrates a multi-tier proxy and caching setup using Docker Comp
 ## Architecture
 
 ```
-Client -> Nginx (80) -> Varnish Cache -> Python Origin (8000)
+Client -> Nginx (80) -> Varnish Cache -> Python Origin (8080)
 ```
 
 ## Components
@@ -16,7 +16,7 @@ Client -> Nginx (80) -> Varnish Cache -> Python Origin (8000)
 ### 1. Origin Server
 - Simple Python HTTP server
 - Serves static content from `origin_content/`
-- Internal service on port 8000
+- Internal service on port 8080
 - Uses Python's built-in HTTP server
 
 ### 2. Varnish Cache
@@ -44,7 +44,7 @@ docker compose up -d
 
 2. Access the services:
 - Main application (through Nginx): http://localhost
-- Direct to origin: http://localhost:8000
+- Direct to origin: http://localhost:8080
 - Health check: http://localhost/health
 
 3. Test caching:
@@ -132,7 +132,7 @@ docker-compose restart cache
 1. Test each layer:
 ```bash
 # Test origin directly
-curl -I http://localhost:8000
+curl -I http://localhost:8080
 
 # Test through Nginx
 curl -I http://localhost

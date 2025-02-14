@@ -4,9 +4,9 @@ services:
     container_name: origin
     working_dir: /app
     command: >
-      sh -c "python -m http.server 8000 --bind 0.0.0.0"
+      sh -c "python -m http.server 8080 --bind 0.0.0.0"
     ports:
-      - "8000:8000"
+      - "8080:8080"
     volumes:
       - ./origin_content:/app
     networks:
@@ -19,8 +19,6 @@ services:
       - origin
     volumes:
       - ./default.vcl:/etc/varnish/default.vcl
-    ports:
-      - "8080:80"
     networks:
       - mynetwork
     command: >
