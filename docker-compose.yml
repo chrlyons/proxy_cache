@@ -1,0 +1,42 @@
+services:
+  origin:
+    image: python:3.9.21-slim
+    container_name: origin
+    working_dir: /app
+    command: >
+      sh -c "python -m http.server 8000 --bind 0.0.0.0"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./origin_content:/app
+    networks:
+      - mynetwork
+
+  cache:
+    image: varnish:stable
+    container_name: cache
+    depends_on:
+      - origin
+    volumes:
+      - ./default.vcl:/etc/varnish/default.vcl
+    ports:
+      - "8080:80"
+    networks:
+      - mynetwork
+    command: >
+      varnishd -F -f /etc/varnish/default.vcl -s malloc,256m
+
+  proxy:
+    image: sameersbn/squid:latest
+    container_name: squid_proxy
+    volumes:
+      - ./squid.conf:/etc/squid3/squid.conf
+    ports:
+      - "3128:3128"
+    networks:
+      - mynetwork
+
+
+networks:
+  mynetwork:
+    driver: bridge
